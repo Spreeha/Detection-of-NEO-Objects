@@ -70,34 +70,100 @@ class AttributeFilter:
         raise UnsupportedCriterionError
 
     def __repr__(self):
+        """Return a string representation"""
         return f"{self.__class__.__name__}(op=operator.{self.op.__name__}, value={self.value})"
 
 
 class DateFilter(AttributeFilter):
+    """
+    A filter for querying NEO data based on date attributes.
+
+    This class provides a class method 'get' to extract and return the date attribute
+    from an approach object.
+
+    Args:
+        cls: The class itself (automatically passed).
+        approach (Approach): An approach object containing NEO data.
+
+    Returns:
+        datetime.date: The date of the NEO approach.
+    """
     @classmethod
     def get(cls, approach):
         return approach.time.date()
        
 
 class DistanceFilter(AttributeFilter):
+    """
+    A filter for querying NEO data based on distance attributes.
+
+    This class provides a class method 'get' to extract and return the distance attribute
+    from an approach object.
+
+    Args:
+        cls: The class itself (automatically passed).
+        approach (Approach): An approach object containing NEO data.
+
+    Returns:
+        float: The distance of the NEO approach .
+    """
     @classmethod
     def get(cls, approach):
         return approach.distance
     
 
 class VelocityFilter(AttributeFilter):
+    """
+    A filter for querying NEO data based on velocity attributes.
+
+    This class provides a class method 'get' to extract and return the velocity attribute
+    from an approach object.
+
+    Args:
+        cls: The class itself (automatically passed).
+        approach (Approach): An approach object containing NEO data.
+
+    Returns:
+        float: The velocity of the NEO approach.
+    """
     @classmethod
     def get(cls, approach):
         return approach.velocity
     
 
 class DiameterFilter(AttributeFilter):
+    """
+    A filter for querying NEO data based on diameter attributes.
+
+    This class provides a class method 'get' to extract and return the diameter attribute
+    from an approach object.
+
+    Args:
+        cls: The class itself (automatically passed).
+        approach (Approach): An approach object containing NEO data.
+
+    Returns:
+        float: The diameter of the NEO approach.
+    """
     @classmethod
     def get(cls, approach):
         return approach.neo.diameter
     
 
 class HazardousFilter(AttributeFilter):
+    """
+    A filter for querying NEO data based on hazardous boolean attributes.
+
+    This class provides a class method 'get' to extract and return the hazardous or not attribute
+    from an approach object.
+
+    Args:
+        cls: The class itself (automatically passed).
+        approach (Approach): An approach object containing NEO data.
+
+    Returns:
+        boolean: Whether it is hazardous or not.
+    """
     @classmethod
     def get(cls, approach):
         return approach.neo.hazardous
@@ -139,7 +205,7 @@ def create_filters(
     :param hazardous: Whether the NEO of a matching `CloseApproach` is potentially hazardous.
     :return: A collection of filters for use with `query`.
     """
-    # TODO: Decide how you will represent your filters.
+    
 
     filters = []
 
@@ -176,9 +242,19 @@ def limit(iterator, n=None):
     :param n: The maximum number of values to produce.
     :yield: The first (at most) `n` values from the iterator.
     """
-    # TODO: Produce at most `n` values from the given iterator.
+    
     
     if n == 0 or n is None:
+        yield from iterator
+    else:
+        count = 0
+        for x in iterator:
+            if count >= n:
+                break
+            yield x
+            count += 1
+    
+    '''if n == 0 or n is None:
         return iterator
     
     limited_values = []
@@ -186,8 +262,4 @@ def limit(iterator, n=None):
         if i >= n:
             break
         limited_values.append(x)
-    return limited_values
-    
-    '''if n == 0 or n is None:
-        return iterator
-    return [x for i, x in enumerate(iterator) if i<n] '''
+    return limited_values'''
